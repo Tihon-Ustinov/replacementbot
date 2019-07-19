@@ -13,8 +13,8 @@ const options = {
 
 
 module.exports = {
-    GROUP_TOKEN: "goup_token",
-    ADMIN_TOKEN: "you_token",
+    GROUP_TOKEN: process.env.GROUP_TOKEN,
+    ADMIN_TOKEN: process.env.ADMIN_TOKEN,
     SECRET: "FuckSecret",
     ID_GROUP: 144267450,
     db_pass:PASSDB,
