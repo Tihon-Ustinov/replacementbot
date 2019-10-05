@@ -1,6 +1,5 @@
 const  needle = require('needle');
-const cheerio = require('cheerio');
-async  function GetHTML (url)
+async function GetHTML (url)
 {
     let result = {status: 'err', result: ''};
     await needle('get', url)

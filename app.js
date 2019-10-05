@@ -1,16 +1,16 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/api');
-var fileRouter = require('./routes/file');
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
+const fileRouter = require('./routes/file');
 
 
-var app = express();
-var http = require('http').Server(app);
+const app = express();
+const http = require('http').Server(app);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/file', fileRouter);
+
 
 
 
