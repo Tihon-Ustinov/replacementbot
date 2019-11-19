@@ -22,12 +22,14 @@ router.use('/', (req, res, next) => {
       if (messageProcessing.hasOwnProperty(req.body.type)) {
         messageProcessing[req.body.type](req.body);
       }
+      res.send('ok');
       break;
     case 'group_leave':
     case 'group_join':
       if (groupProcessing.hasOwnProperty(req.body.type)) {
         groupProcessing[req.body.type](req.body);
       }
+      res.send('ok');
       break;
     case 'vkpay_transaction':
       // TODO: Платеж через вк pay
@@ -36,7 +38,6 @@ router.use('/', (req, res, next) => {
       next();
       break;
   }
-  res.send('ok');
 });
 
 // router.post('/', function(req, res, next) {
