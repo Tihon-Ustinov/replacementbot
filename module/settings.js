@@ -1,26 +1,28 @@
-const PASSDB = "1234";
-const USERDB = "root";
-const SELECTDB = "sdodb2";
-const HOSTDB = "localhost";
-const PORTDB = 3306;
+const USER_DB = process.env.db_user || 'root';
+const PASS_DB = process.env.db_pass || '1234';
+const SELECT_DB = process.env.db_database || 'sdodb2';
+const HOST_DB = process.env.db_host || 'localhost';
+const PORT_DB = process.env.db_port || 3306;
 const options = {
-    host: HOSTDB,
-    port: PORTDB,
-    user: USERDB,
-    password: PASSDB,
-    database: SELECTDB
+  host: HOST_DB,
+  port: PORT_DB,
+  user: USER_DB,
+  password: PASS_DB,
+  database: SELECT_DB,
 };
 
 
 module.exports = {
-    GROUP_TOKEN: process.env.GROUP_TOKEN,
-    ADMIN_TOKEN: process.env.ADMIN_TOKEN,
-    SECRET: "FuckSecret",
-    ID_GROUP: 144267450,
-    db_pass:PASSDB,
-    db_host: HOSTDB,
-    db_base: SELECTDB,
-    db_port: PORTDB,
-    db_option:options
-
+  token_group: process.env.token_group,
+  token_admin: process.env.token_admin,
+  group_secret: process.env.group_secret || 'FuckSecret',
+  group_id: process.env.group_id || 144267450,
+  group_confirm: process.env.group_confirm || 'd01e4ee6',
+  db_pass: PASS_DB,
+  db_host: HOST_DB,
+  db_base: SELECT_DB,
+  db_port: PORT_DB,
+  db_option: options,
+  server_port: process.env.server_port || 8080,
+  server_host: process.env.server_host || 'localhost',
 };

@@ -1,38 +1,43 @@
 const express = require('express');
 
 const settings = require('../module/settings');
-const trueVK = require('../module/VK');
-const libraries = require('../module/libraries');
+// const trueVK = require('../module/VK');
+// const libraries = require('../module/libraries');
 
 const messageProcessing = require('../apiProcessing/messageProcessing');
+const groupProcessing = require('../apiProcessing/groupProcessing');
 
 const router = express.Router();
 
 router.use('/', (req, res, next) => {
-    switch (req.body.type) {
-        case 'confirmation':
-            if (req.body.group_id === 144267450)
-                res.send("d01e4ee6");
-            break;
-        case 'message_new':
-        case 'message_allow':
-        case 'message_deny':
-            if (messageProcessing.hasOwnProperty(req.body.type))
-                messageProcessing[req.body.type](req.body);
-            // TODO: Передать управление обработчику сообщений
-            break;
-        case 'group_leave':
-        case 'group_join':
-            break;
-        case 'vkpay_transaction':
-            // TODO: Платеж через вк pay
-            break;
-        default:
-            next();
-            break;
-    }
-    res.send('ok');
-})
+  switch (req.body.type) {
+    case 'confirmation':
+      if (req.body.group_id === settings.group_id) {
+        res.send(settings.group_confirm);
+      }
+      break;
+    case 'message_new':
+    case 'message_allow':
+    case 'message_deny':
+      if (messageProcessing.hasOwnProperty(req.body.type)) {
+        messageProcessing[req.body.type](req.body);
+      }
+      break;
+    case 'group_leave':
+    case 'group_join':
+      if (groupProcessing.hasOwnProperty(req.body.type)) {
+        groupProcessing[req.body.type](req.body);
+      }
+      break;
+    case 'vkpay_transaction':
+      // TODO: Платеж через вк pay
+      break;
+    default:
+      next();
+      break;
+  }
+  res.send('ok');
+});
 
 // router.post('/', function(req, res, next) {
 //     console.log(settings.GROUP_TOKEN);
@@ -158,7 +163,6 @@ router.use('/', (req, res, next) => {
 //             break;
 //     }
 // });
-
 
 
 module.exports = router;
