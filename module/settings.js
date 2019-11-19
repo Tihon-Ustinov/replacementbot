@@ -15,7 +15,7 @@ const options = {
 module.exports = {
   token_group: process.env.token_group,
   token_admin: process.env.token_admin,
-  group_secret: process.env.group_secret || 'FuckSecret',
+  group_secret: process.env.group_secret,
   group_id: process.env.group_id || 144267450,
   group_confirm: process.env.group_confirm || 'd01e4ee6',
   db_pass: PASS_DB,
@@ -23,6 +23,6 @@ module.exports = {
   db_base: SELECT_DB,
   db_port: PORT_DB,
   db_option: options,
-  server_port: process.env.server_port || 8080,
-  server_host: process.env.server_host || 'localhost',
+  server_port: process.env.PORT || 8080,
+  server_host: process.env.HOST || 'localhost',
 };
