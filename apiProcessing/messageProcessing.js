@@ -23,6 +23,12 @@ module.exports = {
               groupName += arg.toUpperCase() + '-';
             }
           }
+          if (groupName.length === 0) {
+            vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': 'Я не ванга! Группу напиши!'}, function(_o) {
+              console.log(_o);
+            });
+            break;
+          }
           groupName = groupName.slice(0, groupName.length-1);
           let result = [];
           for (const relationship of relationships) {
