@@ -2,6 +2,10 @@
 const db = require('../database/abstracrDatabase');
 const vk = require('../module/VK');
 const Parser = require('../src/js/parser');
+const clearCharts = [
+  {i: 'c', o: 'с'},
+  {i: 'o', o: 'о'},
+];
 module.exports = {
   message_new: async (body) => {
     console.log(body);
@@ -23,7 +27,19 @@ module.exports = {
           let result = [];
           for (const relationship of relationships) {
             const table = replacementParser.converHtmlTableToTable(relationship.table, relationship.info.join('\n'));
-            result = table.tr.filter((tr) => tr.td[0].value.split(' ').join('-') === groupName);
+            clearCharts.forEach((val) => {
+              while (~groupName.indexOf(val.i)) {
+                groupName = groupName.replace(val.i.toUpperCase(), val.o.toUpperCase);
+              }
+            });
+            result = table.tr.filter((tr) => {
+              clearCharts.forEach((val) => {
+                while (~tr.td[0].value.indexOf(val.i)) {
+                  tr.td[0].value = tr.td[0].value.replace(val.i.toUpperCase(), val.o.toUpperCase);
+                }
+              });
+              return tr.td[0].value.split(' ').join('-') === groupName
+            });
             if (result.length > 0) {
               vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': relationship.info.join('\n\r')}, function(_o) {
                 console.log(_o);

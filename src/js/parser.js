@@ -126,6 +126,9 @@ const Parser = class Parser {
       }
     }
     for (let r = 1; r < table.length; r++) {
+      if (table.tr[r].td[0].value.length === 0) {
+        table.tr[r].td[0].value = table.tr[r - 1].td[0].value;
+      }
       if (table.tr[r].td.length < table.tr[r - 1].td.length) {
         table.copyCell(table.tr[r - 1].td[0], table.tr[r]);
       }
