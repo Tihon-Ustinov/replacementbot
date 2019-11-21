@@ -34,14 +34,14 @@ module.exports = {
           for (const relationship of relationships) {
             const table = replacementParser.converHtmlTableToTable(relationship.table, relationship.info.join('\n'));
             clearCharts.forEach((val) => {
-              while (~groupName.indexOf(val.i)) {
-                groupName = groupName.replace(val.i.toUpperCase(), val.o.toUpperCase);
+              while (~groupName.toUpperCase().indexOf(val.i.toUpperCase())) {
+                groupName = groupName.toUpperCase().replace(val.i.toUpperCase(), val.o.toUpperCase);
               }
             });
             result = table.tr.filter((tr) => {
               clearCharts.forEach((val) => {
-                while (~tr.td[0].value.indexOf(val.i)) {
-                  tr.td[0].value = tr.td[0].value.replace(val.i.toUpperCase(), val.o.toUpperCase);
+                while (~tr.td[0].value.toUpperCase().indexOf(val.i.toUpperCase())) {
+                  tr.td[0].value = tr.td[0].value.toUpperCase().replace(val.i.toUpperCase(), val.o.toUpperCase);
                 }
               });
               return tr.td[0].value.split(' ').join('-').toUpperCase() === groupName;
