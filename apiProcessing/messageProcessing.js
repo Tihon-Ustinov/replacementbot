@@ -5,13 +5,14 @@ const Parser = require('../src/js/parser');
 const clearCharts = [
   {i: 'c', o: 'с'},
   {i: 'o', o: 'о'},
+  {i: '&nbsp;', o: ' '},
 ];
 module.exports = {
   message_new: async (body) => {
     console.log(body);
     return new Promise(async (resolve, reject) => {
       // TODO: Реализовать парсинг
-      const argsCommand = body.object.body.split(' ');
+      const argsCommand = body.object.body.trim().split(' ');
       switch (argsCommand[0].toLowerCase()) {
         case 'замена':
           const replacementParser = new Parser('http://www.chtotib.ru/studentu/zamena');
@@ -20,7 +21,7 @@ module.exports = {
           let groupName = '';
           for (const arg of argsCommand) {
             if (arg !== argsCommand[0]) {
-              groupName += arg.toUpperCase() + '-';
+              groupName += (arg.length > 0 && arg !== ' ') ? arg.toUpperCase() + (arg != argsCommand[argsCommand.length - 1] ? '-' : '') : '';
             }
           }
           if (groupName.length === 0) {
@@ -29,7 +30,6 @@ module.exports = {
             });
             break;
           }
-          groupName = groupName.slice(0, groupName.length-1);
           let result = [];
           for (const relationship of relationships) {
             const table = replacementParser.converHtmlTableToTable(relationship.table, relationship.info.join('\n'));
@@ -44,7 +44,7 @@ module.exports = {
                   tr.td[0].value = tr.td[0].value.replace(val.i.toUpperCase(), val.o.toUpperCase);
                 }
               });
-              return tr.td[0].value.split(' ').join('-') === groupName
+              return tr.td[0].value.split(' ').join('-').toUpperCase() === groupName;
             });
             if (result.length > 0) {
               vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': relationship.info.join('\n\r')}, function(_o) {
