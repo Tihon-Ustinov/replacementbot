@@ -30,18 +30,24 @@ module.exports = {
             });
             break;
           }
+          groupName = groupName.toUpperCase();
+          for (let i = 0; i < clearCharts.length; i++) {
+            clearCharts[i].i = clearCharts[i].i.toUpperCase();
+            clearCharts[i].o = clearCharts[i].o.toUpperCase();
+          }
           let result = [];
           for (const relationship of relationships) {
             const table = replacementParser.converHtmlTableToTable(relationship.table, relationship.info.join('\n'));
             clearCharts.forEach((val) => {
-              while (~groupName.toUpperCase().indexOf(val.i.toUpperCase())) {
-                groupName = groupName.toUpperCase().replace(val.i.toUpperCase(), val.o.toUpperCase);
+              while (~groupName.indexOf(val.i)) {
+                groupName = groupName.replace(val.i, val.o);
               }
             });
             result = table.tr.filter((tr) => {
+              tr.td[0].value = tr.td[0].value.toUpperCase();
               clearCharts.forEach((val) => {
-                while (~tr.td[0].value.toUpperCase().indexOf(val.i.toUpperCase())) {
-                  tr.td[0].value = tr.td[0].value.toUpperCase().replace(val.i.toUpperCase(), val.o.toUpperCase);
+                while (~tr.td[0].value.indexOf(val.i)) {
+                  tr.td[0].value = tr.td[0].value.replace(val.i, val.o);
                 }
               });
               return tr.td[0].value.split(' ').join('-').toUpperCase() === groupName;
