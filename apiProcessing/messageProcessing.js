@@ -9,7 +9,6 @@ const clearCharts = [
 ];
 module.exports = {
   message_new: async (body) => {
-    console.log(body);
     return new Promise(async (resolve, reject) => {
       // TODO: Реализовать парсинг
       const argsCommand = body.object.body.trim().split(' ');
@@ -43,15 +42,15 @@ module.exports = {
                 groupName = groupName.replace(val.i, val.o);
               }
             });
-            result = table.tr.filter((tr) => {
+            result = result.concat(table.tr.filter((tr) => {
               tr.td[0].value = tr.td[0].value.toUpperCase();
               clearCharts.forEach((val) => {
                 while (~tr.td[0].value.indexOf(val.i)) {
                   tr.td[0].value = tr.td[0].value.replace(val.i, val.o);
                 }
               });
-              return tr.td[0].value.split(' ').join('-').toUpperCase() === groupName;
-            });
+              return tr.td[0].value.split(' ').join('-') === groupName;
+            }));
             if (result.length > 0) {
               vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': relationship.info.join('\n\r')}, function(_o) {
                 console.log(_o);
@@ -66,15 +65,15 @@ module.exports = {
           if (result.length === 0) {
             const date = [];
             relationships
-                .map((r) => r.info)
-                .forEach((i) => {
-                  for (let str of i) {
-                    str = str.replace('.', '');
-                    if (!~date.indexOf(str) && str[0] === str[0].toLowerCase()) {
-                      date.push(str);
-                    }
+              .map((r) => r.info)
+              .forEach((i) => {
+                for (let str of i) {
+                  str = str.replace('.', '');
+                  if (!~date.indexOf(str) && str[0] === str[0].toLowerCase()) {
+                    date.push(str);
                   }
-                });
+                }
+              });
             console.log(date);
             vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': date.join(' и ') + '\n\rнет замен'}, function(_o) {
               console.log(_o);
