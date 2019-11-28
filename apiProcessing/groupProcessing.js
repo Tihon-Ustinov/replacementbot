@@ -8,5 +8,5 @@ module.exports = {
     return new Promise( async (resolve, reject) => {
       // TODO: передать данные пользователя
     });
-  },
+  }
 };

@@ -48,5 +48,5 @@ module.exports = {
       else if (result.length == 0) cb({result: 'null'});
       else cb({result: result[0]});
     });
-  },
+  }
 };

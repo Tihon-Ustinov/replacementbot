@@ -1,4 +1,4 @@
 module.exports = {
   needle: require('needle'),
-  cheerio: require('cheerio'),
+  cheerio: require('cheerio')
 };

@@ -17,6 +17,7 @@ module.exports = {
   'rules': {
     "new-cap": 0,
     "require-jsdoc": 0,
-    'max-len': [2, 160, 4, {"ignoreUrls": true, "ignoreComments": true, "ignoreStrings": true, "ignoreRegExpLiterals": true}]
+    'max-len': [2, 160, 4, {"ignoreUrls": true, "ignoreComments": true, "ignoreStrings": true, "ignoreRegExpLiterals": true}],
+    "comma-dangle": ["error", "never"],
   },
 };

@@ -2,10 +2,11 @@
 const db = require('../database/abstracrDatabase');
 const vk = require('../module/VK');
 const Parser = require('../src/js/parser');
+
 const clearCharts = [
   {i: 'c', o: 'с'},
   {i: 'o', o: 'о'},
-  {i: '&nbsp;', o: ' '},
+  {i: '&nbsp;', o: ' '}
 ];
 module.exports = {
   message_new: async (body) => {
@@ -24,7 +25,11 @@ module.exports = {
             }
           }
           if (groupName.length === 0) {
-            vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': 'Я не ванга! Группу напиши!'}, function(_o) {
+            vk.VK.request('messages.send', {
+              'user_id': body.object.user_id,
+              'message': 'Я не ванга! Группу напиши!',
+              'keyboard': JSON.stringify(addButton(body.object.user_id, body.object.body, 'primary'))
+            }, function(_o) {
               console.log(_o);
             });
             break;
@@ -52,36 +57,60 @@ module.exports = {
               return tr.td[0].value.split(' ').join('-') === groupName;
             }));
             if (result.length > 0) {
-              vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': relationship.info.join('\n\r')}, function(_o) {
+              vk.VK.request('messages.send', {
+                'user_id': body.object.user_id,
+                'message': relationship.info.join('\n\r')
+              }, function(_o) {
                 console.log(_o);
               });
             }
           }
           result.forEach((row) => {
-            vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': row.toString()}, function(_o) {
+            vk.VK.request('messages.send', {
+              'user_id': body.object.user_id,
+              'message': row.toString(),
+              'keyboard': JSON.stringify(addButton(body.object.user_id, body.object.body, 'positive'))
+            }, function(_o) {
               console.log(_o);
             });
           });
           if (result.length === 0) {
             const date = [];
             relationships
-              .map((r) => r.info)
-              .forEach((i) => {
-                for (let str of i) {
-                  str = str.replace('.', '');
-                  if (!~date.indexOf(str) && str[0] === str[0].toLowerCase()) {
-                    date.push(str);
+                .map((r) => r.info)
+                .forEach((i) => {
+                  for (let str of i) {
+                    str = str.replace('.', '');
+                    if (!~date.indexOf(str) && str[0] === str[0].toLowerCase()) {
+                      date.push(str);
+                    }
                   }
-                }
-              });
+                });
             console.log(date);
-            vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': date.join(' и ') + '\n\rнет замен'}, function(_o) {
+            vk.VK.request('messages.send', {
+              'user_id': body.object.user_id,
+              'message': date.join(' и ') + '\n\rнет замен',
+              'keyboard': JSON.stringify(addButton(body.object.user_id, body.object.body, 'positive'))
+            }, function(_o) {
               console.log(_o);
             });
           }
           break;
         case 'помощь':
-          vk.VK.request('messages.send', {'user_id': body.object.user_id, 'message': 'Не скажу'}, function(_o) {
+          vk.VK.request('messages.send', {
+            'user_id': body.object.user_id,
+            'message': 'Не скажу',
+            'keyboard': JSON.stringify(addButton(body.object.user_id, 'Помощь', 'primary'))
+          }, function(_o) {
+            console.log(_o);
+          });
+          break;
+        case 'время':
+          vk.VK.request('messages.send', {
+            'user_id': body.object.user_id,
+            'message': 'В разработке',
+            'keyboard': JSON.stringify(addButton(body.object.user_id, 'Время', 'primary'))
+          }, function(_o) {
             console.log(_o);
           });
           break;
@@ -105,5 +134,55 @@ module.exports = {
       if (result.success) resolve(result);
       else reject(result);
     });
-  },
+  }
 };
+const keyboard = {
+  'one_time': false,
+  'buttons': [
+    [
+      {
+        'action': {
+          'type': 'text',
+          'label': 'Замена ПКС-14-1'
+        },
+        'color': 'positive'
+      },
+      {
+        'action': {
+          'type': 'text',
+          'label': 'Помощь'
+        },
+        'color': 'primary'
+      },
+      {
+        'action': {
+          'type': 'text',
+          'label': 'Время'
+        },
+        'color': 'secondary'
+      }
+    ]
+  ]
+};
+function getButtons(id) {
+  const buttons = global.myCache.get(`btn-${id}`);
+  if (!buttons) global.myCache.set(`btn-${id}`, keyboard);
+  return buttons ? buttons : keyboard;
+}
+function addButton(id, btnText, color = 'secondary') {
+  const keyb = getButtons(id);
+  const index = keyb.buttons[0].findIndex((btn) => btn.action.label.toLowerCase() === btnText.toLowerCase());
+  if (~~index) keyb.buttons[0].splice(index, 1);
+  else keyb.buttons[0].pop();
+  keyb.buttons[0] = [
+    {
+      'action': {
+        'type': 'text',
+        'label': btnText
+      },
+      'color': color
+    }
+  ].concat(keyb.buttons[0]);
+  global.myCache.set(`btn-${id}`, keyb);
+  return keyb;
+}

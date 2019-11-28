@@ -8,12 +8,12 @@ const options = {
   port: PORT_DB,
   user: USER_DB,
   password: PASS_DB,
-  database: SELECT_DB,
+  database: SELECT_DB
 };
 
 
 module.exports = {
-  token_group: process.env.token_group,
+  token_group: process.env.token_group || '1e374f25bdf2ce4b98c4674c2c60979cee9ecb1953962f38abcd0e9e706d0872099ba433bc33900c7fa4d',
   token_admin: process.env.token_admin,
   group_secret: process.env.group_secret,
   group_id: process.env.group_id || 144267450,
@@ -24,5 +24,5 @@ module.exports = {
   db_port: PORT_DB,
   db_option: options,
   server_port: process.env.PORT || 8080,
-  server_host: process.env.HOST || 'localhost',
+  server_host: process.env.HOST || 'localhost'
 };

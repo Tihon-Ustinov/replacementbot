@@ -6,7 +6,7 @@ const vk = new VK({
   'language': 'ru',
   'secure ': true,
   'https': false,
-  'mode': 'oauth',
+  'mode': 'oauth'
 });
 
 
@@ -19,5 +19,5 @@ settings.VK = vk;
 
 
 module.exports = {
-  VK: vk,
+  VK: vk
 };

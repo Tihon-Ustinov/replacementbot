@@ -14,7 +14,7 @@ module.exports = {
       return new Promise((resolve, reject) => {
 
       });
-    },
+    }
   },
   get: {
     user: async (...arg) =>{
@@ -31,7 +31,7 @@ module.exports = {
       return new Promise((resolve, reject) => {
 
       });
-    },
+    }
   },
   remove: {
     user: async (...arg) =>{
@@ -48,6 +48,6 @@ module.exports = {
       return new Promise((resolve, reject) => {
 
       });
-    },
-  },
+    }
+  }
 };
